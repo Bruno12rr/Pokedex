@@ -2,135 +2,161 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokédex Completa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pokédex Pro</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-:root{--bg1:#121220;--bg2:#1a1a2e;--bg3:#16213e;--card:#0f3460;--text:#e8e8e8;--text2:#a0a0b8;--accent:#e94560;--accent2:#ff6b81;--border:rgba(255,255,255,0.08)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Poppins',sans-serif;background:var(--bg1);color:var(--text);min-height:100vh}
-::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+:root{--bg1:#121220;--bg2:#1a1a2e;--bg3:#16213e;--card:#0f3460;--text:#e8e8e8;--text2:#a0a0b8;--accent:#e94560;--accent2:#ff6b81;--gold:#ffd700;--border:rgba(255,255,255,0.08);--shadow:0 8px 32px rgba(0,0,0,0.4)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Poppins',sans-serif;background:var(--bg1);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+header{background:linear-gradient(135deg,var(--bg2),var(--bg3));padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
 .logo{display:flex;align-items:center;gap:10px}
-.pokeball{width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 48%,#fff 48%,#fff 52%);border:3px solid #333;position:relative}
+.pokeball{width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 48%,#fff 48%,#fff 52%);border:3px solid #333;position:relative;transition:transform .3s}
+.pokeball:hover{transform:rotate(360deg)}
 .pokeball::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#fff;border:3px solid #333;border-radius:50%;z-index:2}
 .pokeball::after{content:'';position:absolute;top:50%;left:0;transform:translateY(-50%);width:100%;height:3px;background:#333;z-index:1}
-.logo h1{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));background-clip:text;-webkit-text-fill-color:transparent}
+.logo h1{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));background-clip:text;-webkit-text-fill-color:transparent}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}
-.tab{padding:8px 18px;border:2px solid var(--border);background:transparent;color:var(--text2);border-radius:20px;cursor:pointer;font-family:'Poppins';font-weight:600;font-size:.8rem;transition:.3s}
-.tab:hover{border-color:var(--accent);color:var(--accent)}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
-main{max-width:1400px;margin:0 auto;padding:20px 16px}
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-.search{flex:1;min-width:220px;position:relative}
-.search input{width:100%;padding:10px 16px 10px 40px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.9rem;transition:.3s}
-.search input:focus{outline:none;border-color:var(--accent)}
-.search::before{content:'🔍';position:absolute;left:14px;top:50%;transform:translateY(-50%)}
-select{padding:10px 14px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.82rem;cursor:pointer;min-width:140px}
-select:focus{outline:none;border-color:var(--accent)}select option{background:var(--bg2)}
-.type-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
-.t-btn{padding:4px 10px;border:2px solid transparent;border-radius:16px;cursor:pointer;font-family:'Poppins';font-weight:700;font-size:.65rem;text-transform:uppercase;color:#fff;opacity:.5;transition:.3s}
-.t-btn:hover,.t-btn.on{opacity:1;transform:scale(1.08)}
-.count{font-size:.8rem;color:var(--text2);margin-bottom:12px}.count span{color:var(--accent);font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px}
-.card{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:16px;padding:14px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent;position:relative;overflow:hidden;opacity:0;animation:fadeIn .3s forwards}
+.tab{padding:8px 16px;border:2px solid var(--border);background:transparent;color:var(--text2);border-radius:20px;cursor:pointer;font-family:'Poppins';font-weight:600;font-size:.75rem;transition:.3s}
+.tab:hover{border-color:var(--accent);color:var(--accent)}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(233,69,96,.3)}
+main{max-width:1400px;margin:0 auto;padding:18px 14px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;padding:10px 14px 10px 38px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.85rem;transition:.3s}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(233,69,96,.2)}
+.search::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.9rem}
+select{padding:10px 12px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.8rem;cursor:pointer;min-width:130px}
+select:focus{outline:none;border-color:var(--accent)}
+.type-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.t-btn{padding:4px 9px;border:2px solid transparent;border-radius:14px;cursor:pointer;font-family:'Poppins';font-weight:700;font-size:.6rem;text-transform:uppercase;color:#fff;opacity:.45;transition:.2s}
+.t-btn:hover,.t-btn.on{opacity:1;transform:scale(1.08);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.count{font-size:.75rem;color:var(--text2);margin-bottom:10px}.count span{color:var(--accent);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.card{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent;position:relative;overflow:hidden;opacity:0;animation:fadeIn .4s forwards}
 @keyframes fadeIn{to{opacity:1}}
-.card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 10px 25px rgba(233,69,96,.15)}
-.card .num{font-size:.7rem;color:var(--text2);font-weight:600}
-.card img{width:95px;height:95px;object-fit:contain;transition:.3s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 8px 20px rgba(233,69,96,.15)}
+.card .num{font-size:.65rem;color:var(--text2);font-weight:600}
+.card img{width:85px;height:85px;object-fit:contain;transition:.3s}
 .card:hover img{transform:scale(1.1)}
-.card .nm{font-size:.85rem;font-weight:700;margin:4px 0;text-transform:capitalize}
-.card .tp{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
-.badge{padding:2px 8px;border-radius:8px;font-size:.6rem;font-weight:700;text-transform:uppercase;color:#fff}
-.card .reg{position:absolute;top:8px;right:8px;font-size:.55rem;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:5px;color:var(--text2)}
-.fav{position:absolute;top:8px;left:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;transition:.3s;filter:grayscale(1) opacity(.25)}
-.fav.on{filter:none}.fav:hover{transform:scale(1.3)}
+.card .nm{font-size:.8rem;font-weight:700;margin:3px 0;text-transform:capitalize}
+.card .tp{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+.badge{padding:2px 7px;border-radius:7px;font-size:.55rem;font-weight:700;text-transform:uppercase;color:#fff}
+.card .reg{position:absolute;top:6px;right:6px;font-size:.5rem;background:rgba(255,255,255,.08);padding:2px 5px;border-radius:4px;color:var(--text2)}
+.fav{position:absolute;top:6px;left:6px;background:none;border:none;font-size:1rem;cursor:pointer;transition:.3s;filter:grayscale(1) opacity(.25)}
+.fav.on{filter:none}.fav:hover{transform:scale(1.2)}
 .t-normal{background:#a8a878}.t-fire{background:#f08030}.t-water{background:#6890f0}.t-electric{background:#f8d030;color:#333}.t-grass{background:#78c850}.t-ice{background:#98d8d8;color:#333}.t-fighting{background:#c03028}.t-poison{background:#a040a0}.t-ground{background:#e0c068;color:#333}.t-flying{background:#a890f0}.t-psychic{background:#f85888}.t-bug{background:#a8b820}.t-rock{background:#b8a038}.t-ghost{background:#705898}.t-dragon{background:#7038f8}.t-dark{background:#705848}.t-steel{background:#b8b8d0;color:#333}.t-fairy{background:#ee99ac;color:#333}
-.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:200;justify-content:center;align-items:center;padding:16px;backdrop-filter:blur(4px)}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:200;justify-content:center;align-items:center;padding:12px;backdrop-filter:blur(6px)}
 .modal-bg.on{display:flex}
-.modal{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:20px;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;border:2px solid var(--accent);animation:mIn .2s ease}
-@keyframes mIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.m-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border)}
-.m-head h2{font-size:1.2rem;text-transform:capitalize}
-.m-close{width:32px;height:32px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s}
+.modal{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:18px;max-width:580px;width:100%;max-height:94vh;overflow-y:auto;border:2px solid var(--accent);animation:mIn .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes mIn{from{transform:scale(.92) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.m-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+.m-head h2{font-size:1.1rem;text-transform:capitalize}
+.m-close{width:30px;height:30px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s}
 .m-close:hover{transform:rotate(90deg)}
-.m-body{padding:20px}
-.m-info{display:flex;gap:20px;align-items:center;margin-bottom:16px}
-.m-img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5))}
-.m-det{flex:1}.m-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
+.m-body{padding:18px}
+.m-info{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.m-img{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5));transition:all .5s}
+.m-img.shiny{filter:drop-shadow(0 0 15px var(--gold)) drop-shadow(0 6px 12px rgba(0,0,0,.5))}
+.m-det{flex:1}.m-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)}
 .m-lab{color:var(--text2);font-weight:500}.m-val{font-weight:700;text-transform:capitalize}
-.stats{margin-top:12px}.stats h3{margin-bottom:10px;font-size:.9rem}
+.stats{margin-top:10px}.stats h3{margin-bottom:8px;font-size:.85rem}
 .s-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.s-n{width:35px;font-size:.65rem;font-weight:700;color:var(--text2);text-transform:uppercase}
-.s-bg{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.s-n{width:30px;font-size:.6rem;font-weight:700;color:var(--text2);text-transform:uppercase}
+.s-bg{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
 .s-bar{height:100%;border-radius:4px;transition:width .8s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.s-v{width:28px;text-align:right;font-weight:700;font-size:.75rem}
+.s-v{width:24px;text-align:right;font-weight:700;font-size:.7rem}
 .abil{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
-.abil-t{padding:3px 10px;background:rgba(255,255,255,.06);border-radius:8px;font-size:.7rem;text-transform:capitalize}
-.evo{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
-.evo-p{text-align:center;cursor:pointer;transition:.3s}.evo-p:hover{transform:scale(1.08)}
-.evo-p img{width:55px;height:55px;object-fit:contain}.evo-p .en{font-size:.6rem;text-transform:capitalize;font-weight:600}
-.evo-a{font-size:1.2rem;color:var(--accent)}
+.abil-t{padding:3px 9px;background:rgba(255,255,255,.06);border-radius:7px;font-size:.65rem;text-transform:capitalize}
+.evo{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.evo-p{text-align:center;cursor:pointer;transition:.3s}.evo-p:hover{transform:scale(1.05)}
+.evo-p img{width:50px;height:50px;object-fit:contain}.evo-p .en{font-size:.55rem;text-transform:capitalize;font-weight:600}
+.evo-a{font-size:1.1rem;color:var(--accent)}
+/* Dynamic Buttons */
+.action-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.act-btn{padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-family:'Poppins';font-weight:600;font-size:.75rem;display:flex;align-items:center;gap:6px;transition:.3s;position:relative;overflow:hidden}
+.act-btn:hover{transform:translateY(-2px)}
+.shiny-btn{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#000}
+.shiny-btn.on{box-shadow:0 0 12px var(--gold);animation:sparkle 1s infinite}
+@keyframes sparkle{0%,100%{box-shadow:0 0 5px var(--gold)}50%{box-shadow:0 0 15px var(--gold), 0 0 25px rgba(255,215,0,.5)}}
+.cry-btn{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff}
+.cry-btn.playing{animation:pulse .6s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05);box-shadow:0 0 15px rgba(79,172,254,.5)}100%{transform:scale(1)}}
+.team-actions{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.team-input{width:100%;padding:10px;background:var(--bg2);border:2px solid var(--border);border-radius:10px;color:var(--text);font-family:'Poppins';margin-bottom:8px}
+.team-input:focus{outline:none;border-color:var(--accent)}
+.team-btns{display:flex;gap:8px}
+.team-btns button{flex:1;padding:9px;border-radius:9px;border:none;cursor:pointer;font-family:'Poppins';font-weight:600;font-size:.75rem;transition:.3s}
+.save-btn{background:var(--accent);color:#fff}.save-btn:hover{background:var(--accent2)}
+.load-btn{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.load-btn:hover{border-color:var(--accent);color:var(--text)}
+.saved-list{margin-top:10px;display:none}.saved-list.show{display:block}
+.saved-item{display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg2);border-radius:8px;margin-bottom:6px;border:1px solid var(--border)}
+.saved-item span{font-size:.75rem}
+.saved-item button{background:none;border:none;color:var(--accent);cursor:pointer;font-size:.8rem}
 .team-sec{display:none}.team-sec.on{display:block}.dex-sec{display:none}.dex-sec.on{display:block}
-.builder{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.slots{position:sticky;top:100px}
-.slots h2{margin-bottom:12px;font-size:1.1rem}
-.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.slot{aspect-ratio:1;border:3px dashed var(--border);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden;background:var(--bg2)}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.slots{position:sticky;top:90px}
+.slots h2{margin-bottom:10px;font-size:1rem}
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.slot{aspect-ratio:1;border:3px dashed var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden;background:var(--bg2)}
 .slot:hover{border-color:var(--accent)}
 .slot.filled{border-style:solid;border-color:var(--accent)}
-.slot .sn{font-size:1.6rem;font-weight:900;color:var(--text2);opacity:.3}
-.slot .sl{font-size:.65rem;color:var(--text2)}
-.slot .rm{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:.6rem;cursor:pointer;display:none;align-items:center;justify-content:center}
+.slot .sn{font-size:1.5rem;font-weight:900;color:var(--text2);opacity:.3}
+.slot .sl{font-size:.6rem;color:var(--text2)}
+.slot .rm{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:.55rem;cursor:pointer;display:none;align-items:center;justify-content:center}
 .slot.filled .rm{display:flex}
-.slot .pi{width:60px;height:60px;object-fit:contain}
-.slot .pn{font-size:.65rem;font-weight:700;text-transform:capitalize;margin-top:3px}
+.slot .pi{width:55px;height:55px;object-fit:contain}
+.slot .pn{font-size:.6rem;font-weight:700;text-transform:capitalize;margin-top:2px}
 .slot .pt{display:flex;gap:2px;margin-top:2px}
-.slot .pt .badge{font-size:.5rem;padding:1px 5px}
-.analysis{background:var(--bg2);border-radius:12px;padding:14px;border:1px solid var(--border);margin-top:12px}
-.analysis h3{margin-bottom:8px;font-size:.85rem}
-.c-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;margin-bottom:8px}
-.c-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.slot .pt .badge{font-size:.45rem;padding:1px 4px}
+.analysis{background:var(--bg2);border-radius:10px;padding:12px;border:1px solid var(--border);margin-top:10px}
+.analysis h3{margin-bottom:6px;font-size:.8rem}
+.c-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;margin-bottom:6px}
+.c-cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.4rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.3)}
 .c-cell.strong{opacity:1;color:#fff}
-.c-cell.weak{opacity:.35}
-.t-pool{max-height:650px;overflow-y:auto;padding-right:6px}
-.t-pool h2{margin-bottom:10px;font-size:1.1rem;position:sticky;top:0;background:var(--bg1);padding:6px 0;z-index:10}
-.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-.tp-card{background:var(--bg2);border-radius:12px;padding:8px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent}
+.c-cell.weak{opacity:.3}
+.t-pool{max-height:600px;overflow-y:auto;padding-right:5px}
+.t-pool h2{margin-bottom:8px;font-size:1rem;position:sticky;top:0;background:var(--bg1);padding:5px 0;z-index:10}
+.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.tp-card{background:var(--bg2);border-radius:10px;padding:8px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent}
 .tp-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.tp-card img{width:60px;height:60px;object-fit:contain}
-.tp-card .tn{font-size:.65rem;font-weight:600;text-transform:capitalize;margin-top:2px}
+.tp-card img{width:55px;height:55px;object-fit:contain}
+.tp-card .tn{font-size:.6rem;font-weight:600;text-transform:capitalize;margin-top:2px}
 .tp-card .tt{display:flex;gap:2px;justify-content:center;margin-top:3px}
-.tp-card .tt .badge{font-size:.5rem;padding:1px 5px}
+.tp-card .tt .badge{font-size:.45rem;padding:1px 4px}
 .tp-card.in-t{border-color:var(--accent);background:rgba(233,69,96,.1);opacity:.6}
-.clear-btn{width:100%;padding:10px;background:transparent;border:2px solid var(--accent);color:var(--accent);border-radius:10px;font-family:'Poppins';font-weight:700;cursor:pointer;transition:.3s;margin-top:10px}
+.clear-btn{width:100%;padding:9px;background:transparent;border:2px solid var(--accent);color:var(--accent);border-radius:9px;font-family:'Poppins';font-weight:700;cursor:pointer;transition:.3s;margin-top:8px}
 .clear-btn:hover{background:var(--accent);color:#fff}
-.loader{display:flex;justify-content:center;padding:40px}.poke-s{width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 50%,#fff 50%);border:3px solid #333;animation:spin 1s linear infinite;position:relative}
-.poke-s::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:#fff;border:3px solid #333;border-radius:50%}
+.loader{display:flex;justify-content:center;padding:35px}.poke-s{width:35px;height:35px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 50%,#fff 50%);border:3px solid #333;animation:spin 1s linear infinite;position:relative}
+.poke-s::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#fff;border:3px solid #333;border-radius:50%}
 .poke-s::after{content:'';position:absolute;top:50%;left:0;transform:translateY(-50%);width:100%;height:3px;background:#333}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:10px;font-weight:600;font-size:.8rem;z-index:300;animation:tI .3s,tO .3s 2.5s forwards}
+.toast{position:fixed;bottom:15px;right:15px;background:var(--accent);color:#fff;padding:9px 16px;border-radius:9px;font-weight:600;font-size:.75rem;z-index:300;animation:tI .3s,tO .3s 2.5s forwards}
 @keyframes tI{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes tO{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
 .progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:999;transition:width .3s}
 @media(max-width:900px){.builder{grid-template-columns:1fr}.slots{position:static}}
-@media(max-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}.controls{flex-direction:column}.tabs{justify-content:center}.c-grid{grid-template-columns:repeat(6,1fr)}}
+@media(max-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(135px,1fr))}.controls{flex-direction:column}.tabs{justify-content:center}.c-grid{grid-template-columns:repeat(6,1fr)}}
 </style>
 </head>
 <body>
 <div class="progress-bar" id="progBar" style="width:0%"></div>
 <header>
- <div class="logo"><div class="pokeball"></div><h1>Pokédex</h1></div>
+ <div class="logo"><div class="pokeball"></div><h1>Pokédex Pro</h1></div>
  <nav class="tabs">
   <button class="tab active" data-t="dex">📖 Pokédex</button>
-  <button class="tab" data-t="team">⚔️ Montar Time</button>
+  <button class="tab" data-t="team">️ Time</button>
  </nav>
 </header>
 <main>
  <section class="dex-sec on" id="dexSec">
   <div class="controls">
-   <div class="search"><input type="text" id="q" placeholder="Buscar por nome ou número..."></div>
-   <select id="regF"><option value="all">🌍 Todas as Regiões</option><option value="kanto">Kanto</option><option value="johto">Johto</option><option value="hoenn">Hoenn</option><option value="sinnoh">Sinnoh</option><option value="unova">Unova</option><option value="kalos">Kalos</option><option value="alola">Alola</option><option value="galar">Galar</option><option value="paldea">Paldea</option></select>
-   <select id="genF"><option value="all">🎮 Todas as Gerações</option><option value="1">Gen 1</option><option value="2">Gen 2</option><option value="3">Gen 3</option><option value="4">Gen 4</option><option value="5">Gen 5</option><option value="6">Gen 6</option><option value="7">Gen 7</option><option value="8">Gen 8</option><option value="9">Gen 9</option></select>
+   <div class="search"><input type="text" id="q" placeholder="Buscar por nome ou #..."></div>
+   <select id="regF"><option value="all">🌍 Regiões</option><option value="kanto">Kanto</option><option value="johto">Johto</option><option value="hoenn">Hoenn</option><option value="sinnoh">Sinnoh</option><option value="unova">Unova</option><option value="kalos">Kalos</option><option value="alola">Alola</option><option value="galar">Galar</option><option value="paldea">Paldea</option></select>
+   <select id="genF"><option value="all"> Gerações</option><option value="1">Gen 1</option><option value="2">Gen 2</option><option value="3">Gen 3</option><option value="4">Gen 4</option><option value="5">Gen 5</option><option value="6">Gen 6</option><option value="7">Gen 7</option><option value="8">Gen 8</option><option value="9">Gen 9</option></select>
    <select id="ordF"><option value="num">🔢 Número</option><option value="name">🔤 Nome</option></select>
   </div>
   <div class="type-bar" id="tBar"></div>
@@ -142,12 +168,20 @@ select:focus{outline:none;border-color:var(--accent)}select option{background:va
    <div class="slots">
     <h2>⚔️ Seu Time</h2>
     <div class="t-grid" id="tGrid"></div>
-    <div class="analysis" id="anal"><h3>📊 Análise</h3><p style="color:var(--text2);font-size:.75rem">Adicione Pokémon ao time.</p></div>
-    <button class="clear-btn" id="clearBtn" style="display:none">🗑️ Limpar Time</button>
+    <div class="analysis" id="anal"><h3> Análise</h3><p style="color:var(--text2);font-size:.7rem">Adicione Pokémon.</p></div>
+    <div class="team-actions">
+     <input type="text" id="teamName" class="team-input" placeholder="Nome do time (ex: My Best Team)">
+     <div class="team-btns">
+      <button class="save-btn" onclick="saveTeam()"> Salvar</button>
+      <button class="load-btn" onclick="toggleLoadMenu()">📂 Carregar</button>
+     </div>
+     <div class="saved-list" id="savedList"></div>
+     <button class="clear-btn" id="clearBtn" style="display:none;margin-top:10px">️ Limpar Time</button>
+    </div>
    </div>
    <div class="t-pool">
     <h2>🔍 Escolha Pokémon</h2>
-    <div class="controls" style="margin-bottom:10px"><div class="search"><input type="text" id="tq" placeholder="Buscar..."></div></div>
+    <div class="controls" style="margin-bottom:8px"><div class="search"><input type="text" id="tq" placeholder="Buscar..."></div></div>
     <div class="type-bar" id="ttBar"></div>
     <div class="tp-grid" id="tpGrid"></div>
    </div>
@@ -163,45 +197,31 @@ const TC={normal:{w:['fighting'],r:[],i:['ghost']},fire:{w:['water','ground','ro
 const REGS={kanto:[1,151],johto:[152,251],hoenn:[252,386],sinnoh:[387,493],unova:[494,649],kalos:[650,721],alola:[722,809],galar:[810,905],paldea:[906,1025]};
 const TOTAL=1025;
 
-// ── DATA ──
 let allP=[],filtered=[];
 let team=[],fav=new Set(JSON.parse(localStorage.getItem('pfav')||'[]'));
+let savedTeams=JSON.parse(localStorage.getItem('psavedTeams')||'[]');
 let activeType='all',tActiveType='all';
-let detailCache={};
+let detailCache={},currentModalP=null,isShiny=false,cryAudio=null;
 
 function getReg(id){for(let[r,[s,e]]of Object.entries(REGS))if(id>=s&&id<=e)return r;return 'paldea'}
 function getGen(id){if(id<=151)return'1';if(id<=251)return'2';if(id<=386)return'3';if(id<=493)return'4';if(id<=649)return'5';if(id<=721)return'6';if(id<=809)return'7';if(id<=905)return'8';return'9'}
-function sprite(id){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-function art(id){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
+function sprite(id,s=false){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon${s?'/shiny':''}/${id}.png`}
+function art(id,s=false){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork${s?'/shiny':''}/${id}.png`}
 
-// ── FAST INIT: 1 fetch for all basic data ──
 async function loadAll(){
  const bar=document.getElementById('progBar');
- bar.style.width='20%';
- 
- // 1 fetch gets ALL pokemon basic info
+ bar.style.width='15%';
  const res=await fetch(`${API}/pokemon?limit=${TOTAL}&offset=0`);
  const data=await res.json();
- bar.style.width='50%';
- 
+ bar.style.width='45%';
  allP=data.results.map((p,i)=>{
   const id=i+1;
-  return{
-   id,name:p.name,
-   types:[], // loaded on demand
-   region:getReg(id),
-   gen:getGen(id),
-   loaded:false // lazy load detail
-  };
+  return{id,name:p.name,types:[],region:getReg(id),gen:getGen(id),loaded:false};
  });
  bar.style.width='70%';
- 
- // Load types in batches of 50 using Promise.all
- for(let i=0;i<allP.length;i+=50){
-  const batch=allP.slice(i,i+50);
-  const results=await Promise.allSettled(
-   batch.map(p=>fetch(`${API}/pokemon/${p.id}`).then(r=>r.json()))
-  );
+ for(let i=0;i<allP.length;i+=60){
+  const batch=allP.slice(i,i+60);
+  const results=await Promise.allSettled(batch.map(p=>fetch(`${API}/pokemon/${p.id}`).then(r=>r.json())));
   results.forEach((r,idx)=>{
    if(r.status==='fulfilled'){
     const p=batch[idx];
@@ -211,13 +231,12 @@ async function loadAll(){
     p.loaded=true;
    }
   });
-  bar.style.width=`${70+((i+50)/allP.length)*25}%`;
+  bar.style.width=`${70+((i+60)/allP.length)*25}%`;
  }
  bar.style.width='100%';
- setTimeout(()=>bar.style.display='none',500);
+ setTimeout(()=>bar.style.display='none',400);
 }
 
-// ── LAZY DETAIL: fetch only when needed ──
 async function loadDetail(p){
  if(p._detail)return p._detail;
  if(detailCache[p.id])return detailCache[p.id];
@@ -235,7 +254,6 @@ async function loadDetail(p){
  return p._detail;
 }
 
-// ── RENDER CARDS ──
 function renderCard(p){
  const div=document.createElement('div');
  div.className='card';
@@ -269,7 +287,6 @@ function renderPoolCard(p){
  return div;
 }
 
-// ── FILTER & RENDER ──
 function applyFilter(){
  const q=document.getElementById('q').value.toLowerCase();
  const reg=document.getElementById('regF').value;
@@ -288,22 +305,20 @@ function applyFilter(){
  
  const grid=document.getElementById('grid');
  grid.innerHTML='';
- // Render first 60 immediately, rest on scroll
- filtered.slice(0,60).forEach(p=>grid.appendChild(renderCard(p)));
+ filtered.slice(0,50).forEach(p=>grid.appendChild(renderCard(p)));
  
- document.getElementById('cnt').textContent=`Mostrando ${Math.min(60,filtered.length)} de ${filtered.length} Pokémon`;
+ document.getElementById('cnt').textContent=`Mostrando ${Math.min(50,filtered.length)} de ${filtered.length}`;
  
- // Infinite scroll
  if(window._observer)window._observer.disconnect();
- let loaded=60;
+ let loaded=50;
  window._observer=new IntersectionObserver(entries=>{
   if(entries[0].isIntersecting&&loaded<filtered.length){
-   const next=filtered.slice(loaded,loaded+40);
+   const next=filtered.slice(loaded,loaded+30);
    next.forEach(p=>grid.appendChild(renderCard(p)));
-   loaded+=40;
-   document.getElementById('cnt').textContent=`Mostrando ${Math.min(loaded,filtered.length)} de ${filtered.length} Pokémon`;
+   loaded+=30;
+   document.getElementById('cnt').textContent=`Mostrando ${Math.min(loaded,filtered.length)} de ${filtered.length}`;
   }
- },{rootMargin:'400px'});
+ },{rootMargin:'300px'});
  const sentinel=document.createElement('div');
  sentinel.style.height='1px';
  grid.appendChild(sentinel);
@@ -319,10 +334,9 @@ function renderPool(){
  });
  const grid=document.getElementById('tpGrid');
  grid.innerHTML='';
- list.slice(0,80).forEach(p=>grid.appendChild(renderPoolCard(p)));
+ list.slice(0,70).forEach(p=>grid.appendChild(renderPoolCard(p)));
 }
 
-// ── TEAM ──
 function renderTeam(){
  const grid=document.getElementById('tGrid');
  grid.innerHTML='';
@@ -345,51 +359,129 @@ function renderTeam(){
 
 function renderAnalysis(){
  const el=document.getElementById('anal');
- if(!team.length){el.innerHTML='<h3>📊 Análise</h3><p style="color:var(--text2);font-size:.75rem">Adicione Pokémon ao time.</p>';return;}
+ if(!team.length){el.innerHTML='<h3>📊 Análise</h3><p style="color:var(--text2);font-size:.7rem">Adicione Pokémon.</p>';return;}
  let tc={};team.forEach(p=>p.types.forEach(t=>tc[t]=(tc[t]||0)+1));
  let wk={},rs={},im={};TYPES.forEach(t=>{wk[t]=0;rs[t]=0;im[t]=0;});
  team.forEach(p=>{p.types.forEach(pt=>{TYPES.forEach(at=>{const c=TC[at];if(c.w.includes(pt))wk[at]++;if(c.r.includes(pt))rs[at]++;if(c.i.includes(pt))im[at]++;});});});
  let html='<h3>📊 Análise de Tipos</h3><div class="c-grid">';
  TYPES.forEach(t=>{let cl=wk[t]>0?'strong':im[t]>0?'':rs[t]>0?'weak':'';html+=`<div class="c-cell t-${t} ${cl}">${t.slice(0,3)}</div>`;});
- html+='</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">';
+ html+='</div><div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">';
  Object.entries(tc).forEach(([t,c])=>html+=`<span class="badge t-${t}">${t}×${c}</span>`);
  html+='</div>';
  let wkT=TYPES.filter(t=>wk[t]>0);
  let rsT=TYPES.filter(t=>rs[t]>0);
- html+=`<div style="font-size:.72rem"><b style="color:#ff6b6b">⚠️ Fraquezas:</b> ${wkT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
- html+=`<div style="font-size:.72rem;margin-top:4px"><b style="color:#6bffa6">🛡️ Resistências:</b> ${rsT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
+ html+=`<div style="font-size:.68rem"><b style="color:#ff6b6b">⚠️ Fraquezas:</b> ${wkT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
+ html+=`<div style="font-size:.68rem;margin-top:3px"><b style="color:#6bffa6">🛡️ Resistências:</b> ${rsT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
  el.innerHTML=html;
 }
 
-// ── MODAL ──
+// ─ SHINY & CRY ──
+function toggleShiny(){
+ if(!currentModalP)return;
+ isShiny=!isShiny;
+ const img=document.getElementById('modalImg');
+ const btn=document.getElementById('shinyBtn');
+ img.src=art(currentModalP.id,isShiny);
+ img.classList.toggle('shiny',isShiny);
+ btn.classList.toggle('on',isShiny);
+ btn.innerHTML=isShiny?'✨ Normal':'✨ Shiny';
+}
+
+async function playCry(){
+ if(!currentModalP)return;
+ const btn=document.getElementById('cryBtn');
+ if(cryAudio){cryAudio.pause();cryAudio=null;btn.classList.remove('playing');return;}
+ try{
+  const url=`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/cries/${currentModalP.id}.ogg`;
+  cryAudio=new Audio(url);
+  cryAudio.volume=0.6;
+  await cryAudio.play();
+  btn.classList.add('playing');
+  cryAudio.onended=()=>{btn.classList.remove('playing');cryAudio=null;};
+ }catch(e){
+  showToast('Cry indisponível');
+  btn.classList.remove('playing');
+ }
+}
+
+// ── TEAM SAVE/LOAD ──
+function saveTeam(){
+ if(team.length===0)return showToast('Adicione Pokémon primeiro!');
+ const nameInput=document.getElementById('teamName');
+ const name=nameInput.value.trim()||`Time ${savedTeams.length+1}`;
+ if(savedTeams.find(t=>t.name===name))return showToast('Nome já existe!');
+ if(savedTeams.length>=5)return showToast('Máximo 5 times salvos!');
+ savedTeams.push({name,pokemonIds:team.map(p=>p.id)});
+ localStorage.setItem('psavedTeams',JSON.stringify(savedTeams));
+ nameInput.value='';
+ renderSavedList();
+ showToast(`Time "${name}" salvo!`);
+}
+
+function loadTeam(name){
+ const t=savedTeams.find(x=>x.name===name);
+ if(!t)return;
+ team=t.pokemonIds.map(id=>allP.find(p=>p.id===id)).filter(Boolean);
+ renderTeam();
+ toggleLoadMenu();
+ showToast(`Time "${name}" carregado!`);
+}
+
+function deleteTeam(name){
+ savedTeams=savedTeams.filter(t=>t.name!==name);
+ localStorage.setItem('psavedTeams',JSON.stringify(savedTeams));
+ renderSavedList();
+}
+
+function toggleLoadMenu(){
+ const list=document.getElementById('savedList');
+ list.classList.toggle('show');
+ if(list.classList.contains('show'))renderSavedList();
+}
+
+function renderSavedList(){
+ const list=document.getElementById('savedList');
+ if(savedTeams.length===0){list.innerHTML='<p style="color:var(--text2);font-size:.7rem;text-align:center;padding:8px">Nenhum time salvo.</p>';return;}
+ list.innerHTML=savedTeams.map(t=>`
+  <div class="saved-item">
+   <span>🛡️ ${t.name} <small style="color:var(--text2)">(${t.pokemonIds.length}/6)</small></span>
+   <div>
+    <button onclick="loadTeam('${t.name}')" style="color:var(--accent);margin-right:6px">📥</button>
+    <button onclick="deleteTeam('${t.name}')" style="color:#ff6b6b">🗑️</button>
+   </div>
+  </div>
+ `).join('');
+}
+
 async function openModal(p){
+ currentModalP=p;isShiny=false;
  document.getElementById('mNm').textContent=`#${String(p.id).padStart(3,'0')} ${p.name}`;
  document.getElementById('mBody').innerHTML='<div class="loader"><div class="poke-s"></div></div>';
  document.getElementById('mBg').classList.add('on');
  
  const d=await loadDetail(p);
  const total=d.stats.reduce((s,x)=>s+x.base,0);
- const sp=await fetch(`${API}/pokemon-species/${p.id}`).catch(()=>null);
- const desc=sp?sp.data?.flavor_text_entries?.find(f=>f.language.name==='en')?.flavor_text?.replace(/[\n\f\r]/g,' '):'Sem descrição.';
  
  document.getElementById('mBody').innerHTML=`
   <div class="m-info">
-   <img class="m-img" src="${art(p.id)}" alt="${p.name}">
+   <img class="m-img" id="modalImg" src="${art(p.id)}" alt="${p.name}">
    <div class="m-det">
-    <div style="margin-bottom:6px">${d.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>
+    <div style="margin-bottom:5px">${d.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>
     <div class="m-row"><span class="m-lab">Altura</span><span class="m-val">${d.height} m</span></div>
     <div class="m-row"><span class="m-lab">Peso</span><span class="m-val">${d.weight} kg</span></div>
     <div class="m-row"><span class="m-lab">Região</span><span class="m-val">${p.region}</span></div>
-    <div class="m-row"><span class="m-lab">Total Stats</span><span class="m-val">${total}</span></div>
+    <div class="m-row"><span class="m-lab">Total</span><span class="m-val">${total}</span></div>
    </div>
   </div>
-  ${desc?`<div style="background:rgba(255,255,255,.04);padding:8px 12px;border-radius:8px;margin:10px 0;font-size:.75rem;color:var(--text2);font-style:italic">"${desc}"</div>`:''}
+  <div class="action-btns">
+   <button class="act-btn shiny-btn" id="shinyBtn" onclick="toggleShiny()">✨ Shiny</button>
+   <button class="act-btn cry-btn" id="cryBtn" onclick="playCry()">🔊 Cry</button>
+  </div>
   <div class="stats"><h3>📊 Base Stats</h3>${d.stats.map(s=>{const n=s.name==='hp'?'HP':s.name==='attack'?'ATK':s.name==='defense'?'DEF':s.name==='speed'?'SPD':s.name==='specialattack'?'SpA':'SpD';return`<div class="s-row"><span class="s-n">${n}</span><div class="s-bg"><div class="s-bar" style="width:${Math.min(s.base/200*100,100)}%"></div></div><span class="s-v">${s.base}</span></div>`;}).join('')}</div>
-  <div style="margin-top:12px"><h3 style="font-size:.82rem;margin-bottom:4px">✨ Habilidades</h3><div class="abil">${d.abilities.map(a=>`<span class="abil-t">${a.replace(/-/g,' ')}</span>`).join('')}</div></div>
-  <div style="margin-top:10px"><h3 style="font-size:.82rem;margin-bottom:4px">💥 Ataques</h3><div style="display:flex;flex-wrap:wrap;gap:4px">${d.moves.map(m=>`<span style="padding:2px 8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:.65rem;text-transform:capitalize">${m.replace(/-/g,' ')}</span>`).join('')}</div></div>
-  <div class="evo" id="evo" style="margin-top:14px"><p style="color:var(--text2);font-size:.75rem">Carregando evolução...</p></div>`;
+  <div style="margin-top:10px"><h3 style="font-size:.78rem;margin-bottom:3px">✨ Habilidades</h3><div class="abil">${d.abilities.map(a=>`<span class="abil-t">${a.replace(/-/g,' ')}</span>`).join('')}</div></div>
+  <div style="margin-top:8px"><h3 style="font-size:.78rem;margin-bottom:3px">💥 Ataques</h3><div style="display:flex;flex-wrap:wrap;gap:3px">${d.moves.map(m=>`<span style="padding:2px 7px;background:rgba(255,255,255,.05);border-radius:5px;font-size:.6rem;text-transform:capitalize">${m.replace(/-/g,' ')}</span>`).join('')}</div></div>
+  <div class="evo" id="evo" style="margin-top:12px"><p style="color:var(--text2);font-size:.7rem">Carregando evolução...</p></div>`;
  
- // Evolution chain
  try{
   const sr=await fetch(`${API}/pokemon-species/${p.id}`);
   const sd=await sr.json();
@@ -404,16 +496,21 @@ async function openModal(p){
     const names=chain.map(n=>allP.find(x=>x.name===n)).filter(Boolean);
     evoEl.innerHTML=names.map((e,i)=>`<div class="evo-p" onclick="closeModal();setTimeout(()=>{const x=allP.find(p=>p.name==='${e.name}');if(x)openModal(x)},100)"><img src="${sprite(e.id)}"><div class="en">${e.name}</div></div>${i<names.length-1?'<span class="evo-a">→</span>':''}`).join('');
    }else{
-    evoEl.innerHTML='<p style="color:var(--text2);font-size:.75rem">Sem evolução.</p>';
+    evoEl.innerHTML='<p style="color:var(--text2);font-size:.7rem">Sem evolução.</p>';
    }
   }
  }catch(e){}
 }
 
-function closeModal(){document.getElementById('mBg').classList.remove('on')}
-function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function closeModal(){
+ document.getElementById('mBg').classList.remove('on');
+ if(cryAudio){cryAudio.pause();cryAudio=null;}
+ const btn=document.getElementById('cryBtn');if(btn)btn.classList.remove('playing');
+ currentModalP=null;isShiny=false;
+}
 
-// ── TYPE BAR ──
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
+
 function typeBar(cid,active,cb){
  const c=document.getElementById(cid);
  c.innerHTML=`<button class="t-btn ${active==='all'?'on':''}" style="background:#666" data-t="all">Todos</button>`+TYPES.map(t=>`<button class="t-btn ${active===t?'on':''} t-${t}" data-t="${t}">${t}</button>`).join('');
@@ -425,7 +522,6 @@ function typeBar2(cid,active,cb){
  c.querySelectorAll('.t-btn').forEach(b=>b.addEventListener('click',()=>{tActiveType=b.dataset.t==='all'?'all':b.dataset.t;cb();}));
 }
 
-// ── INIT ──
 (async()=>{
  await loadAll();
  typeBar('tBar',activeType,()=>applyFilter());
@@ -435,7 +531,6 @@ function typeBar2(cid,active,cb){
  renderPool();
 })();
 
-// ── EVENTS ──
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
  b.classList.add('active');
