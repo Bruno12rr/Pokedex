@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex Completa</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+:root{--bg1:#121220;--bg2:#1a1a2e;--bg3:#16213e;--card:#0f3460;--text:#e8e8e8;--text2:#a0a0b8;--accent:#e94560;--accent2:#ff6b81;--border:rgba(255,255,255,0.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:var(--bg1);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+header{background:linear-gradient(135deg,var(--bg2),var(--bg3));padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
+.logo{display:flex;align-items:center;gap:10px}
+.pokeball{width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 48%,#fff 48%,#fff 52%);border:3px solid #333;position:relative}
+.pokeball::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#fff;border:3px solid #333;border-radius:50%;z-index:2}
+.pokeball::after{content:'';position:absolute;top:50%;left:0;transform:translateY(-50%);width:100%;height:3px;background:#333;z-index:1}
+.logo h1{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));background-clip:text;-webkit-text-fill-color:transparent}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:8px 18px;border:2px solid var(--border);background:transparent;color:var(--text2);border-radius:20px;cursor:pointer;font-family:'Poppins';font-weight:600;font-size:.8rem;transition:.3s}
+.tab:hover{border-color:var(--accent);color:var(--accent)}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+main{max-width:1400px;margin:0 auto;padding:20px 16px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;padding:10px 16px 10px 40px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.9rem;transition:.3s}
+.search input:focus{outline:none;border-color:var(--accent)}
+.search::before{content:'🔍';position:absolute;left:14px;top:50%;transform:translateY(-50%)}
+select{padding:10px 14px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins';font-size:.82rem;cursor:pointer;min-width:140px}
+select:focus{outline:none;border-color:var(--accent)}select option{background:var(--bg2)}
+.type-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.t-btn{padding:4px 10px;border:2px solid transparent;border-radius:16px;cursor:pointer;font-family:'Poppins';font-weight:700;font-size:.65rem;text-transform:uppercase;color:#fff;opacity:.5;transition:.3s}
+.t-btn:hover,.t-btn.on{opacity:1;transform:scale(1.08)}
+.count{font-size:.8rem;color:var(--text2);margin-bottom:12px}.count span{color:var(--accent);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px}
+.card{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:16px;padding:14px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent;position:relative;overflow:hidden;opacity:0;animation:fadeIn .3s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 10px 25px rgba(233,69,96,.15)}
+.card .num{font-size:.7rem;color:var(--text2);font-weight:600}
+.card img{width:95px;height:95px;object-fit:contain;transition:.3s}
+.card:hover img{transform:scale(1.1)}
+.card .nm{font-size:.85rem;font-weight:700;margin:4px 0;text-transform:capitalize}
+.card .tp{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.badge{padding:2px 8px;border-radius:8px;font-size:.6rem;font-weight:700;text-transform:uppercase;color:#fff}
+.card .reg{position:absolute;top:8px;right:8px;font-size:.55rem;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:5px;color:var(--text2)}
+.fav{position:absolute;top:8px;left:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;transition:.3s;filter:grayscale(1) opacity(.25)}
+.fav.on{filter:none}.fav:hover{transform:scale(1.3)}
+.t-normal{background:#a8a878}.t-fire{background:#f08030}.t-water{background:#6890f0}.t-electric{background:#f8d030;color:#333}.t-grass{background:#78c850}.t-ice{background:#98d8d8;color:#333}.t-fighting{background:#c03028}.t-poison{background:#a040a0}.t-ground{background:#e0c068;color:#333}.t-flying{background:#a890f0}.t-psychic{background:#f85888}.t-bug{background:#a8b820}.t-rock{background:#b8a038}.t-ghost{background:#705898}.t-dragon{background:#7038f8}.t-dark{background:#705848}.t-steel{background:#b8b8d0;color:#333}.t-fairy{background:#ee99ac;color:#333}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:200;justify-content:center;align-items:center;padding:16px;backdrop-filter:blur(4px)}
+.modal-bg.on{display:flex}
+.modal{background:linear-gradient(145deg,var(--card),var(--bg3));border-radius:20px;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;border:2px solid var(--accent);animation:mIn .2s ease}
+@keyframes mIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.m-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border)}
+.m-head h2{font-size:1.2rem;text-transform:capitalize}
+.m-close{width:32px;height:32px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s}
+.m-close:hover{transform:rotate(90deg)}
+.m-body{padding:20px}
+.m-info{display:flex;gap:20px;align-items:center;margin-bottom:16px}
+.m-img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5))}
+.m-det{flex:1}.m-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
+.m-lab{color:var(--text2);font-weight:500}.m-val{font-weight:700;text-transform:capitalize}
+.stats{margin-top:12px}.stats h3{margin-bottom:10px;font-size:.9rem}
+.s-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.s-n{width:35px;font-size:.65rem;font-weight:700;color:var(--text2);text-transform:uppercase}
+.s-bg{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.s-bar{height:100%;border-radius:4px;transition:width .8s;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.s-v{width:28px;text-align:right;font-weight:700;font-size:.75rem}
+.abil{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.abil-t{padding:3px 10px;background:rgba(255,255,255,.06);border-radius:8px;font-size:.7rem;text-transform:capitalize}
+.evo{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.evo-p{text-align:center;cursor:pointer;transition:.3s}.evo-p:hover{transform:scale(1.08)}
+.evo-p img{width:55px;height:55px;object-fit:contain}.evo-p .en{font-size:.6rem;text-transform:capitalize;font-weight:600}
+.evo-a{font-size:1.2rem;color:var(--accent)}
+.team-sec{display:none}.team-sec.on{display:block}.dex-sec{display:none}.dex-sec.on{display:block}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.slots{position:sticky;top:100px}
+.slots h2{margin-bottom:12px;font-size:1.1rem}
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.slot{aspect-ratio:1;border:3px dashed var(--border);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden;background:var(--bg2)}
+.slot:hover{border-color:var(--accent)}
+.slot.filled{border-style:solid;border-color:var(--accent)}
+.slot .sn{font-size:1.6rem;font-weight:900;color:var(--text2);opacity:.3}
+.slot .sl{font-size:.65rem;color:var(--text2)}
+.slot .rm{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:.6rem;cursor:pointer;display:none;align-items:center;justify-content:center}
+.slot.filled .rm{display:flex}
+.slot .pi{width:60px;height:60px;object-fit:contain}
+.slot .pn{font-size:.65rem;font-weight:700;text-transform:capitalize;margin-top:3px}
+.slot .pt{display:flex;gap:2px;margin-top:2px}
+.slot .pt .badge{font-size:.5rem;padding:1px 5px}
+.analysis{background:var(--bg2);border-radius:12px;padding:14px;border:1px solid var(--border);margin-top:12px}
+.analysis h3{margin-bottom:8px;font-size:.85rem}
+.c-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;margin-bottom:8px}
+.c-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.c-cell.strong{opacity:1;color:#fff}
+.c-cell.weak{opacity:.35}
+.t-pool{max-height:650px;overflow-y:auto;padding-right:6px}
+.t-pool h2{margin-bottom:10px;font-size:1.1rem;position:sticky;top:0;background:var(--bg1);padding:6px 0;z-index:10}
+.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.tp-card{background:var(--bg2);border-radius:12px;padding:8px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent}
+.tp-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.tp-card img{width:60px;height:60px;object-fit:contain}
+.tp-card .tn{font-size:.65rem;font-weight:600;text-transform:capitalize;margin-top:2px}
+.tp-card .tt{display:flex;gap:2px;justify-content:center;margin-top:3px}
+.tp-card .tt .badge{font-size:.5rem;padding:1px 5px}
+.tp-card.in-t{border-color:var(--accent);background:rgba(233,69,96,.1);opacity:.6}
+.clear-btn{width:100%;padding:10px;background:transparent;border:2px solid var(--accent);color:var(--accent);border-radius:10px;font-family:'Poppins';font-weight:700;cursor:pointer;transition:.3s;margin-top:10px}
+.clear-btn:hover{background:var(--accent);color:#fff}
+.loader{display:flex;justify-content:center;padding:40px}.poke-s{width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,var(--accent) 50%,#fff 50%);border:3px solid #333;animation:spin 1s linear infinite;position:relative}
+.poke-s::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:#fff;border:3px solid #333;border-radius:50%}
+.poke-s::after{content:'';position:absolute;top:50%;left:0;transform:translateY(-50%);width:100%;height:3px;background:#333}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:10px;font-weight:600;font-size:.8rem;z-index:300;animation:tI .3s,tO .3s 2.5s forwards}
+@keyframes tI{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes tO{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:999;transition:width .3s}
+@media(max-width:900px){.builder{grid-template-columns:1fr}.slots{position:static}}
+@media(max-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}.controls{flex-direction:column}.tabs{justify-content:center}.c-grid{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progBar" style="width:0%"></div>
+<header>
+ <div class="logo"><div class="pokeball"></div><h1>Pokédex</h1></div>
+ <nav class="tabs">
+  <button class="tab active" data-t="dex">📖 Pokédex</button>
+  <button class="tab" data-t="team">⚔️ Montar Time</button>
+ </nav>
+</header>
+<main>
+ <section class="dex-sec on" id="dexSec">
+  <div class="controls">
+   <div class="search"><input type="text" id="q" placeholder="Buscar por nome ou número..."></div>
+   <select id="regF"><option value="all">🌍 Todas as Regiões</option><option value="kanto">Kanto</option><option value="johto">Johto</option><option value="hoenn">Hoenn</option><option value="sinnoh">Sinnoh</option><option value="unova">Unova</option><option value="kalos">Kalos</option><option value="alola">Alola</option><option value="galar">Galar</option><option value="paldea">Paldea</option></select>
+   <select id="genF"><option value="all">🎮 Todas as Gerações</option><option value="1">Gen 1</option><option value="2">Gen 2</option><option value="3">Gen 3</option><option value="4">Gen 4</option><option value="5">Gen 5</option><option value="6">Gen 6</option><option value="7">Gen 7</option><option value="8">Gen 8</option><option value="9">Gen 9</option></select>
+   <select id="ordF"><option value="num">🔢 Número</option><option value="name">🔤 Nome</option></select>
+  </div>
+  <div class="type-bar" id="tBar"></div>
+  <div class="count" id="cnt"></div>
+  <div class="grid" id="grid"></div>
+ </section>
+ <section class="team-sec" id="teamSec">
+  <div class="builder">
+   <div class="slots">
+    <h2>⚔️ Seu Time</h2>
+    <div class="t-grid" id="tGrid"></div>
+    <div class="analysis" id="anal"><h3>📊 Análise</h3><p style="color:var(--text2);font-size:.75rem">Adicione Pokémon ao time.</p></div>
+    <button class="clear-btn" id="clearBtn" style="display:none">🗑️ Limpar Time</button>
+   </div>
+   <div class="t-pool">
+    <h2>🔍 Escolha Pokémon</h2>
+    <div class="controls" style="margin-bottom:10px"><div class="search"><input type="text" id="tq" placeholder="Buscar..."></div></div>
+    <div class="type-bar" id="ttBar"></div>
+    <div class="tp-grid" id="tpGrid"></div>
+   </div>
+  </div>
+ </section>
+</main>
+<div class="modal-bg" id="mBg"><div class="modal"><div class="m-head"><h2 id="mNm"></h2><button class="m-close" id="mCl">✕</button></div><div class="m-body" id="mBody"></div></div></div>
+
+<script>
+const API='https://pokeapi.co/api/v2';
+const TYPES=['normal','fire','water','electric','grass','ice','fighting','poison','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'];
+const TC={normal:{w:['fighting'],r:[],i:['ghost']},fire:{w:['water','ground','rock'],r:['fire','grass','ice','bug','steel','fairy'],i:[]},water:{w:['electric','grass'],r:['fire','water','ice','steel'],i:[]},electric:{w:['ground'],r:['electric','flying','steel'],i:[]},grass:{w:['fire','ice','poison','flying','bug'],r:['water','electric','grass','ground'],i:[]},ice:{w:['fire','fighting','rock','steel'],r:['ice'],i:[]},fighting:{w:['flying','psychic','fairy'],r:['bug','rock','dark'],i:[]},poison:{w:['ground','psychic'],r:['grass','fighting','poison','bug','fairy'],i:[]},ground:{w:['water','grass','ice'],r:['poison','rock'],i:['electric']},flying:{w:['electric','ice','rock'],r:['grass','fighting','bug'],i:['ground']},psychic:{w:['bug','ghost','dark'],r:['fighting','psychic'],i:[]},bug:{w:['fire','flying','rock'],r:['grass','fighting','ground'],i:[]},rock:{w:['water','grass','fighting','ground','steel'],r:['normal','fire','poison','flying'],i:[]},ghost:{w:['ghost','dark'],r:['poison','bug'],i:['normal','fighting']},dragon:{w:['ice','dragon','fairy'],r:['fire','water','electric','grass'],i:[]},dark:{w:['fighting','bug','fairy'],r:['ghost','dark'],i:['psychic']},steel:{w:['fire','fighting','ground'],r:['normal','grass','ice','flying','psychic','bug','rock','dragon','steel','fairy'],i:['poison']},fairy:{w:['poison','steel'],r:['fighting','bug','dark'],i:['dragon']}};
+const REGS={kanto:[1,151],johto:[152,251],hoenn:[252,386],sinnoh:[387,493],unova:[494,649],kalos:[650,721],alola:[722,809],galar:[810,905],paldea:[906,1025]};
+const TOTAL=1025;
+
+// ── DATA ──
+let allP=[],filtered=[];
+let team=[],fav=new Set(JSON.parse(localStorage.getItem('pfav')||'[]'));
+let activeType='all',tActiveType='all';
+let detailCache={};
+
+function getReg(id){for(let[r,[s,e]]of Object.entries(REGS))if(id>=s&&id<=e)return r;return 'paldea'}
+function getGen(id){if(id<=151)return'1';if(id<=251)return'2';if(id<=386)return'3';if(id<=493)return'4';if(id<=649)return'5';if(id<=721)return'6';if(id<=809)return'7';if(id<=905)return'8';return'9'}
+function sprite(id){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
+function art(id){return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
+
+// ── FAST INIT: 1 fetch for all basic data ──
+async function loadAll(){
+ const bar=document.getElementById('progBar');
+ bar.style.width='20%';
+ 
+ // 1 fetch gets ALL pokemon basic info
+ const res=await fetch(`${API}/pokemon?limit=${TOTAL}&offset=0`);
+ const data=await res.json();
+ bar.style.width='50%';
+ 
+ allP=data.results.map((p,i)=>{
+  const id=i+1;
+  return{
+   id,name:p.name,
+   types:[], // loaded on demand
+   region:getReg(id),
+   gen:getGen(id),
+   loaded:false // lazy load detail
+  };
+ });
+ bar.style.width='70%';
+ 
+ // Load types in batches of 50 using Promise.all
+ for(let i=0;i<allP.length;i+=50){
+  const batch=allP.slice(i,i+50);
+  const results=await Promise.allSettled(
+   batch.map(p=>fetch(`${API}/pokemon/${p.id}`).then(r=>r.json()))
+  );
+  results.forEach((r,idx)=>{
+   if(r.status==='fulfilled'){
+    const p=batch[idx];
+    p.types=r.value.types.map(t=>t.type.name);
+    p.height=r.value.height/10;
+    p.weight=r.value.weight/10;
+    p.loaded=true;
+   }
+  });
+  bar.style.width=`${70+((i+50)/allP.length)*25}%`;
+ }
+ bar.style.width='100%';
+ setTimeout(()=>bar.style.display='none',500);
+}
+
+// ── LAZY DETAIL: fetch only when needed ──
+async function loadDetail(p){
+ if(p._detail)return p._detail;
+ if(detailCache[p.id])return detailCache[p.id];
+ const res=await fetch(`${API}/pokemon/${p.id}`);
+ const d=await res.json();
+ p._detail={
+  types:p.types.length?p.types:d.types.map(t=>t.type.name),
+  stats:d.stats.map(s=>({name:s.stat.name.replace('special-',''),base:s.base_stat})),
+  abilities:d.abilities.map(a=>a.ability.name),
+  moves:d.moves.slice(0,12).map(m=>m.move.name),
+  height:p.height??d.height/10,
+  weight:p.weight??d.weight/10
+ };
+ detailCache[p.id]=p._detail;
+ return p._detail;
+}
+
+// ── RENDER CARDS ──
+function renderCard(p){
+ const div=document.createElement('div');
+ div.className='card';
+ div.innerHTML=`
+  <button class="fav ${fav.has(p.id)?'on':''}" data-id="${p.id}">❤️</button>
+  <span class="num">#${String(p.id).padStart(3,'0')}</span>
+  <img src="${sprite(p.id)}" alt="${p.name}" loading="lazy">
+  <div class="nm">${p.name}</div>
+  <div class="tp" id="tp-${p.id}">${p.types.length?p.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join(''):'<span class="badge" style="opacity:.4">...</span>'}</div>
+  <span class="reg">${p.region}</span>`;
+ 
+ div.querySelector('.fav').addEventListener('click',e=>{
+  e.stopPropagation();
+  fav.has(p.id)?fav.delete(p.id):fav.add(p.id);
+  e.target.classList.toggle('on');
+  localStorage.setItem('pfav',JSON.stringify([...fav]));
+ });
+ div.addEventListener('click',()=>openModal(p));
+ return div;
+}
+
+function renderPoolCard(p){
+ const div=document.createElement('div');
+ div.className='tp-card'+(team.find(t=>t.id===p.id)?' in-t':'');
+ div.innerHTML=`<img src="${sprite(p.id)}" alt="${p.name}" loading="lazy"><div class="tn">${p.name}</div><div class="tt">${p.types.length?p.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join(''):'<span class="badge" style="opacity:.4">...</span>'}</div>`;
+ div.addEventListener('click',()=>{
+  if(team.find(t=>t.id===p.id))return;
+  if(team.length>=6)return showToast('Time cheio!');
+  team.push(p);renderTeam();renderPool();showToast(`${p.name} adicionado!`);
+ });
+ return div;
+}
+
+// ── FILTER & RENDER ──
+function applyFilter(){
+ const q=document.getElementById('q').value.toLowerCase();
+ const reg=document.getElementById('regF').value;
+ const gen=document.getElementById('genF').value;
+ const ord=document.getElementById('ordF').value;
+ 
+ filtered=allP.filter(p=>{
+  if(activeType!=='all'&&!p.types.includes(activeType))return false;
+  if(reg!=='all'&&p.region!==reg)return false;
+  if(gen!=='all'&&p.gen!==gen)return false;
+  if(q&&!p.name.includes(q)&&!String(p.id).includes(q))return false;
+  return true;
+ });
+ 
+ if(ord==='name')filtered.sort((a,b)=>a.name.localeCompare(b.name));
+ 
+ const grid=document.getElementById('grid');
+ grid.innerHTML='';
+ // Render first 60 immediately, rest on scroll
+ filtered.slice(0,60).forEach(p=>grid.appendChild(renderCard(p)));
+ 
+ document.getElementById('cnt').textContent=`Mostrando ${Math.min(60,filtered.length)} de ${filtered.length} Pokémon`;
+ 
+ // Infinite scroll
+ if(window._observer)window._observer.disconnect();
+ let loaded=60;
+ window._observer=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting&&loaded<filtered.length){
+   const next=filtered.slice(loaded,loaded+40);
+   next.forEach(p=>grid.appendChild(renderCard(p)));
+   loaded+=40;
+   document.getElementById('cnt').textContent=`Mostrando ${Math.min(loaded,filtered.length)} de ${filtered.length} Pokémon`;
+  }
+ },{rootMargin:'400px'});
+ const sentinel=document.createElement('div');
+ sentinel.style.height='1px';
+ grid.appendChild(sentinel);
+ window._observer.observe(sentinel);
+}
+
+function renderPool(){
+ const q=document.getElementById('tq').value.toLowerCase();
+ let list=allP.filter(p=>{
+  if(tActiveType!=='all'&&!p.types.includes(tActiveType))return false;
+  if(q&&!p.name.includes(q)&&!String(p.id).includes(q))return false;
+  return true;
+ });
+ const grid=document.getElementById('tpGrid');
+ grid.innerHTML='';
+ list.slice(0,80).forEach(p=>grid.appendChild(renderPoolCard(p)));
+}
+
+// ── TEAM ──
+function renderTeam(){
+ const grid=document.getElementById('tGrid');
+ grid.innerHTML='';
+ for(let i=0;i<6;i++){
+  const p=team[i];
+  const div=document.createElement('div');
+  div.className='slot'+(p?' filled':'');
+  if(p){
+   div.innerHTML=`<button class="rm">✕</button><img class="pi" src="${sprite(p.id)}"><div class="pn">${p.name}</div><div class="pt">${p.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join('')}</div>`;
+   div.querySelector('.rm').addEventListener('click',e=>{e.stopPropagation();team=team.filter(x=>x.id!==p.id);renderTeam();renderPool();renderAnalysis();});
+   div.addEventListener('click',()=>openModal(p));
+  }else{
+   div.innerHTML=`<span class="sn">${i+1}</span><span class="sl">Vazio</span>`;
+  }
+  grid.appendChild(div);
+ }
+ document.getElementById('clearBtn').style.display=team.length?'block':'none';
+ renderAnalysis();
+}
+
+function renderAnalysis(){
+ const el=document.getElementById('anal');
+ if(!team.length){el.innerHTML='<h3>📊 Análise</h3><p style="color:var(--text2);font-size:.75rem">Adicione Pokémon ao time.</p>';return;}
+ let tc={};team.forEach(p=>p.types.forEach(t=>tc[t]=(tc[t]||0)+1));
+ let wk={},rs={},im={};TYPES.forEach(t=>{wk[t]=0;rs[t]=0;im[t]=0;});
+ team.forEach(p=>{p.types.forEach(pt=>{TYPES.forEach(at=>{const c=TC[at];if(c.w.includes(pt))wk[at]++;if(c.r.includes(pt))rs[at]++;if(c.i.includes(pt))im[at]++;});});});
+ let html='<h3>📊 Análise de Tipos</h3><div class="c-grid">';
+ TYPES.forEach(t=>{let cl=wk[t]>0?'strong':im[t]>0?'':rs[t]>0?'weak':'';html+=`<div class="c-cell t-${t} ${cl}">${t.slice(0,3)}</div>`;});
+ html+='</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">';
+ Object.entries(tc).forEach(([t,c])=>html+=`<span class="badge t-${t}">${t}×${c}</span>`);
+ html+='</div>';
+ let wkT=TYPES.filter(t=>wk[t]>0);
+ let rsT=TYPES.filter(t=>rs[t]>0);
+ html+=`<div style="font-size:.72rem"><b style="color:#ff6b6b">⚠️ Fraquezas:</b> ${wkT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
+ html+=`<div style="font-size:.72rem;margin-top:4px"><b style="color:#6bffa6">🛡️ Resistências:</b> ${rsT.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>`;
+ el.innerHTML=html;
+}
+
+// ── MODAL ──
+async function openModal(p){
+ document.getElementById('mNm').textContent=`#${String(p.id).padStart(3,'0')} ${p.name}`;
+ document.getElementById('mBody').innerHTML='<div class="loader"><div class="poke-s"></div></div>';
+ document.getElementById('mBg').classList.add('on');
+ 
+ const d=await loadDetail(p);
+ const total=d.stats.reduce((s,x)=>s+x.base,0);
+ const sp=await fetch(`${API}/pokemon-species/${p.id}`).catch(()=>null);
+ const desc=sp?sp.data?.flavor_text_entries?.find(f=>f.language.name==='en')?.flavor_text?.replace(/[\n\f\r]/g,' '):'Sem descrição.';
+ 
+ document.getElementById('mBody').innerHTML=`
+  <div class="m-info">
+   <img class="m-img" src="${art(p.id)}" alt="${p.name}">
+   <div class="m-det">
+    <div style="margin-bottom:6px">${d.types.map(t=>`<span class="badge t-${t}">${t}</span>`).join(' ')}</div>
+    <div class="m-row"><span class="m-lab">Altura</span><span class="m-val">${d.height} m</span></div>
+    <div class="m-row"><span class="m-lab">Peso</span><span class="m-val">${d.weight} kg</span></div>
+    <div class="m-row"><span class="m-lab">Região</span><span class="m-val">${p.region}</span></div>
+    <div class="m-row"><span class="m-lab">Total Stats</span><span class="m-val">${total}</span></div>
+   </div>
+  </div>
+  ${desc?`<div style="background:rgba(255,255,255,.04);padding:8px 12px;border-radius:8px;margin:10px 0;font-size:.75rem;color:var(--text2);font-style:italic">"${desc}"</div>`:''}
+  <div class="stats"><h3>📊 Base Stats</h3>${d.stats.map(s=>{const n=s.name==='hp'?'HP':s.name==='attack'?'ATK':s.name==='defense'?'DEF':s.name==='speed'?'SPD':s.name==='specialattack'?'SpA':'SpD';return`<div class="s-row"><span class="s-n">${n}</span><div class="s-bg"><div class="s-bar" style="width:${Math.min(s.base/200*100,100)}%"></div></div><span class="s-v">${s.base}</span></div>`;}).join('')}</div>
+  <div style="margin-top:12px"><h3 style="font-size:.82rem;margin-bottom:4px">✨ Habilidades</h3><div class="abil">${d.abilities.map(a=>`<span class="abil-t">${a.replace(/-/g,' ')}</span>`).join('')}</div></div>
+  <div style="margin-top:10px"><h3 style="font-size:.82rem;margin-bottom:4px">💥 Ataques</h3><div style="display:flex;flex-wrap:wrap;gap:4px">${d.moves.map(m=>`<span style="padding:2px 8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:.65rem;text-transform:capitalize">${m.replace(/-/g,' ')}</span>`).join('')}</div></div>
+  <div class="evo" id="evo" style="margin-top:14px"><p style="color:var(--text2);font-size:.75rem">Carregando evolução...</p></div>`;
+ 
+ // Evolution chain
+ try{
+  const sr=await fetch(`${API}/pokemon-species/${p.id}`);
+  const sd=await sr.json();
+  if(sd.evolution_chain){
+   const er=await fetch(sd.evolution_chain.url);
+   const ed=await er.json();
+   const chain=[];
+   const walk=node=>{chain.push(node.species.name);if(node.evolves_to.length)walk(node.evolves_to[0]);};
+   walk(ed.chain);
+   const evoEl=document.getElementById('evo');
+   if(chain.length>1){
+    const names=chain.map(n=>allP.find(x=>x.name===n)).filter(Boolean);
+    evoEl.innerHTML=names.map((e,i)=>`<div class="evo-p" onclick="closeModal();setTimeout(()=>{const x=allP.find(p=>p.name==='${e.name}');if(x)openModal(x)},100)"><img src="${sprite(e.id)}"><div class="en">${e.name}</div></div>${i<names.length-1?'<span class="evo-a">→</span>':''}`).join('');
+   }else{
+    evoEl.innerHTML='<p style="color:var(--text2);font-size:.75rem">Sem evolução.</p>';
+   }
+  }
+ }catch(e){}
+}
+
+function closeModal(){document.getElementById('mBg').classList.remove('on')}
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+
+// ── TYPE BAR ──
+function typeBar(cid,active,cb){
+ const c=document.getElementById(cid);
+ c.innerHTML=`<button class="t-btn ${active==='all'?'on':''}" style="background:#666" data-t="all">Todos</button>`+TYPES.map(t=>`<button class="t-btn ${active===t?'on':''} t-${t}" data-t="${t}">${t}</button>`).join('');
+ c.querySelectorAll('.t-btn').forEach(b=>b.addEventListener('click',()=>{activeType=b.dataset.t==='all'?'all':b.dataset.t;cb();}));
+}
+function typeBar2(cid,active,cb){
+ const c=document.getElementById(cid);
+ c.innerHTML=`<button class="t-btn ${active==='all'?'on':''}" style="background:#666" data-t="all">Todos</button>`+TYPES.map(t=>`<button class="t-btn ${active===t?'on':''} t-${t}" data-t="${t}">${t}</button>`).join('');
+ c.querySelectorAll('.t-btn').forEach(b=>b.addEventListener('click',()=>{tActiveType=b.dataset.t==='all'?'all':b.dataset.t;cb();}));
+}
+
+// ── INIT ──
+(async()=>{
+ await loadAll();
+ typeBar('tBar',activeType,()=>applyFilter());
+ typeBar2('ttBar',tActiveType,()=>renderPool());
+ applyFilter();
+ renderTeam();
+ renderPool();
+})();
+
+// ── EVENTS ──
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');
+ document.getElementById('dexSec').classList.toggle('on',b.dataset.t==='dex');
+ document.getElementById('teamSec').classList.toggle('on',b.dataset.t==='team');
+}));
+document.getElementById('q').addEventListener('input',applyFilter);
+document.getElementById('tq').addEventListener('input',renderPool);
+document.getElementById('regF').addEventListener('change',applyFilter);
+document.getElementById('genF').addEventListener('change',applyFilter);
+document.getElementById('ordF').addEventListener('change',applyFilter);
+document.getElementById('mCl').addEventListener('click',closeModal);
+document.getElementById('mBg').addEventListener('click',e=>{if(e.target===document.getElementById('mBg'))closeModal();});
+document.getElementById('clearBtn').addEventListener('click',()=>{team=[];renderTeam();renderPool();showToast('Time limpo!');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
